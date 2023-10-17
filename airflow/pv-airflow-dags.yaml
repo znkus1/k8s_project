@@ -4,11 +4,11 @@ metadata:
   name: pv-airflow-dags
 spec:
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   capacity:
-    storage: 1Gi
+    storage: 5Gi
   persistentVolumeReclaimPolicy: Retain
   storageClassName: pv-airflow-dags
   nfs:
     server: 172.31.3.234
-    path: /tmp/k8spv
+    path: /mnt/data/airflow/dags
