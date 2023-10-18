@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-flask
+  namespace: flask
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+        app: flask-web-deploy
+  template:
+    metadata:
+      labels:
+        app: flask-web-deploy
+    spec:
+      containers:
+      - name: nginx-f
+        image: [hub.docker.com - my nginx repository name]
+        ports:
+        - containerPort: 80
+
+      - name: flask-web
+        image: [hub.docker.com - my flask repository name]
+        ports:
+        - containerPort: 5000
