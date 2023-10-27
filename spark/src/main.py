@@ -1,7 +1,13 @@
 import logging
 import os
+import numpy as np
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import when
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml.feature import VectorAssembler, StandardScaler
+from pyspark.ml import Pipeline
+from pyspark.ml.regression import LinearRegression
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("MinioSparkJob")
@@ -25,8 +31,47 @@ load_config(spark.sparkContext)
 df = spark.read.option("header", "true").option("inferSchema", "true").csv(os.getenv("INPUT_PATH", "s3a://csv/*.csv"))
 
 # Spark Code
-total_rows_count = df.count()
-logger.info(f"Total Rows: {total_rows_count}")
+
+rnd_seed = 42
+np.random.seed = rnd_seed
+np.random.set_state = rnd_seed
+
+# preprocessing
+df = df.fillna(0)
+df = df.withColumn("CarrierDelay", when(df["CarrierDelay"] == "NA", 0).otherwise(df["CarrierDelay"]))
+df = df.withColumn("WeatherDelay", when(df["WeatherDelay"] == "NA", 0).otherwise(df["WeatherDelay"]))
+df = df.withColumn("NASDelay", when(df["NASDelay"] == "NA", 0).otherwise(df["NASDelay"]))
+df = df.withColumn("SecurityDelay", when(df["SecurityDelay"] == "NA", 0).otherwise(df["SecurityDelay"]))
+df = df.withColumn("LateAircraftDelay", when(df["LateAircraftDelay"] == "NA", 0).otherwise(df["LateAircraftDelay"]))
+df = df.withColumn("CancellationCode", when(df["CancellationCode"] == "None", 0 ).otherwise(df["CancellationCode"]))
+df = df.withColumn("ArrDelay", when(df["ArrDelay"] == "NA", 0).otherwise(df["ArrDelay"]))
+df = df.withColumn("Distance", when(df["Distance"] == "NA", 0).otherwise(df["Distance"]))
+df = df.withColumn("ArrDelay", df["ArrDelay"].cast("int"))
+df = df.withColumn("Distance", df["Distance"].cast("int"))
+
+# string indexer
+featureCols = ["Month", "DayofMonth", "DayOfWeek", "CRSDepTime", "CRSArrTime", "Distance", "OriginIndex", "DestIndex", "CarrierIndex"]
+origin_indexer = StringIndexer(inputCol="Origin", outputCol="OriginIndex")
+dest_indexer = StringIndexer(inputCol="Dest", outputCol="DestIndex")
+carrier_indexer = StringIndexer(inputCol="UniqueCarrier", outputCol="CarrierIndex")
+assembler = VectorAssembler(inputCols=featureCols, outputCol="features")
+scaler = StandardScaler(inputCol='features', outputCol='features_scaled')
+pipeline = Pipeline(stages=[origin_indexer, dest_indexer, carrier_indexer, assembler, scaler])
+pipeline = pipeline.fit(df)
+preprocessed_df = pipeline.transform(df)
+
+# ml
+train_data, test_data = preprocessed_df.randomSplit([0.8, 0.2], seed=rnd_seed)
+lr = LinearRegression(labelCol="ArrDelay", predictionCol='predArrDelay')
+linearModel = lr.fit(train_data)
+predictions = linearModel.transform(test_data)
+pred_labels = predictions.select('predArrDelay', 'ArrDelay')
 
 # Write Data to MinIO
-df.write.format("csv").option("header", "true").save(os.getenv("OUTPUT_PATH", "s3a://output/demo"))
+linearModel.save(os.getenv("MODEL_OUTPUT_PATH", "s3a://spark_models/model"))
+pipeline.write().overwrite().save(os.getenv("PIPELINE_OUTPUT_PATH", "s3a://spark_models/pipeline"))
+
+# logging
+logger.info(f"Total Rows:{df.count()}")
+logger.info(f"RMSE:{linearModel.summary.rootMeanSquaredError}")
+logger.info(f"MAE:{linearModel.summary.meanAbsoluteError}")

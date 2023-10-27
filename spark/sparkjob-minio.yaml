@@ -7,7 +7,7 @@ spec:
     type: Python
     pythonVersion: "3"
     mode: cluster
-    image: "dbin67/sparkjob-demo:0.4"
+    image: "dbin67/sparkjob-demo:0.5"
     imagePullPolicy: Always
     mainApplicationFile: local:///app/main.py
     sparkVersion: "3.3.1"
@@ -32,15 +32,17 @@ spec:
                 value: password
     executor:
         cores: 1
-        instances: 1
+        instances: 3
         memory: "512m"
         labels:
             version: 3.3.1
         env:
             -   name: INPUT_PATH
                 value: "s3a://csv/*.csv"
-            -   name: OUTPUT_PATH
-                value: "s3a://output/demo"
+            -   name: MODEL_OUTPUT_PATH
+                value: "s3a://spark_models/model"
+            -   name: PIPELINE_OUTPUT_PATH
+                value: "s3a://spark_models/pipeline"
             -   name: AWS_REGION
                 valueFrom:
                     secretKeyRef:
