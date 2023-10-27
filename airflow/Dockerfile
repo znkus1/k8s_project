@@ -1,6 +1,6 @@
 FROM apache/airflow
 
-RUN pip install --no-cache-dir requests
-RUN pip install --no-cache-dir pytz
-RUN pip install --no-cache-dir minio
-RUN pip install --no-cache-dir psycopg2-binary
+RUN pip install requests
+RUN pip install pytz
+RUN pip install minio
+RUN pip install psycopg2-binary

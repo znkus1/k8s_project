@@ -15,7 +15,7 @@ dt = datetime.now(tz=tz)
 year, month = dt.year, 12 if dt.month == 1 else dt.month - 1
 
 # for test
-# year, month = 2002, 8
+# year, month = 1987, 10
 
 fname = f"{year}{month:02}.csv"
 
@@ -49,7 +49,7 @@ def postgres_to_minio():
                 print(f"Error while bulk inserting: {e}")
                 raise e
 
-    postgres = PostgresDB("172.31.3.234", "dbname", "postgres", "postgres")
+    postgres = PostgresDB("172.31.3.234", "airport", "postgres", "postgres")
     sql = f"COPY (SELECT * FROM db WHERE db.Year={year} and db.month={month}) TO '{fname}' WITH CSV HEADER;"
     postgres.execute(sql)
 
@@ -57,7 +57,6 @@ def postgres_to_minio():
     from minio import Minio
 
     client = Minio("172.31.3.234:9000", "admin", "password", secure=False)
-    client.list_buckets()
     client.fput_object('csv', fname, fname)
 
 

@@ -1,3 +1,5 @@
+defaultAirflowRepository: dbin67/airflow-k8s
+
 webserver:
   service:
     type: LoadBalancer
@@ -33,7 +35,7 @@ logs:
     enabled: false
 
 migrateDatabaseJob:
-  enabled: true
+  enabled: false
 
 postgresql:
   enabled: false
