@@ -68,8 +68,8 @@ predictions = linearModel.transform(test_data)
 pred_labels = predictions.select('predArrDelay', 'ArrDelay')
 
 # Write Data to MinIO
-linearModel.save(os.getenv("MODEL_OUTPUT_PATH", "s3a://spark_models/model"))
-pipeline.write().overwrite().save(os.getenv("PIPELINE_OUTPUT_PATH", "s3a://spark_models/pipeline"))
+linearModel.save(os.getenv("MODEL_OUTPUT_PATH", "s3a://spark-models/model"))
+pipeline.write().overwrite().save(os.getenv("PIPELINE_OUTPUT_PATH", "s3a://spark-models/pipeline"))
 
 # logging
 logger.info(f"Total Rows:{df.count()}")

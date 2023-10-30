@@ -40,9 +40,9 @@ spec:
             -   name: INPUT_PATH
                 value: "s3a://csv/*.csv"
             -   name: MODEL_OUTPUT_PATH
-                value: "s3a://spark_models/model"
+                value: "s3a://spark-models/model"
             -   name: PIPELINE_OUTPUT_PATH
-                value: "s3a://spark_models/pipeline"
+                value: "s3a://spark-models/pipeline"
             -   name: AWS_REGION
                 valueFrom:
                     secretKeyRef:
