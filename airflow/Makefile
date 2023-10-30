@@ -5,4 +5,4 @@ all:
 
 clean:
 	helm uninstall airflow -n airflow
-	kubectl delete pv pv-airflow-dags.yaml
+	kubectl delete pv pv-airflow-dags

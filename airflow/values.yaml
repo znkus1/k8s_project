@@ -1,4 +1,4 @@
-defaultAirflowRepository: dbin67/airflow-k8s
+defaultAirflowRepository: dbin67/airflow-k8s:0.2
 
 webserver:
   service:
@@ -35,7 +35,7 @@ logs:
     enabled: false
 
 migrateDatabaseJob:
-  enabled: false
+  enabled: true
 
 postgresql:
   enabled: false
