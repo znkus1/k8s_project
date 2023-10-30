@@ -1,4 +1,5 @@
-defaultAirflowRepository: dbin67/airflow-k8s:0.2
+defaultAirflowRepository: dbin67/airflow-ec2
+defaultAirflowTag: 0.3
 
 webserver:
   service:
