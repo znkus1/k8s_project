@@ -11,7 +11,7 @@ spec:
   - http:
       paths:
       - pathType: Prefix
-        path: /flasktest01
+        path: /flasktest01(/|$)(.*)
         backend:
           service:
             name: flask-service
