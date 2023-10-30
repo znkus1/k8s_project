@@ -22,36 +22,28 @@ fname = f"{year}{month:02}.csv"
 
 def postgres_to_minio():
     # postgres_to_local
+    import pandas as pd
     import psycopg2
 
-    class PostgresDB:
-        def __init__(self, host, dbname, user, password, port=5432):
-            self.conn = psycopg2.connect(
-                host=host,
-                dbname=dbname,
-                user=user,
-                password=password,
-                port=port,
-            )
+    # 데이터베이스에 연결
+    conn = psycopg2.connect(
+        host="172.31.3.234",
+        dbname="ml",
+        user="postgres",
+        password="postgres",
+        port=5432,
+    )
 
-        def execute(self, sql, data=None):
-            with self.conn:
-                with self.conn.cursor() as curs:
-                    curs.execute(sql, data)
+    # SQL 쿼리 실행
+    query = f"SELECT * FROM airport WHERE airport.year='{year}' and airport.month='{month}'"
+    df = pd.read_sql_query(query, conn)
+    df = df.drop('id', axis=1)
+    df = df.drop('insert_dt', axis=1)
+    df.columns = ['Year', 'Month', 'DayofMonth', 'DayOfWeek', 'DepTime', 'CRSDepTime', 'ArrTime', 'CRSArrTime', 'UniqueCarrier', 'FlightNum', 'TailNum', 'ActualElapsedTime', 'CRSElapsedTime', 'AirTime', 'ArrDelay', 'DepDelay', 'Origin', 'Dest', 'Distance', 'TaxiIn', 'TaxiOut', 'Cancelled', 'CancellationCode', 'Diverted', 'CarrierDelay', 'WeatherDelay', 'NASDelay', 'SecurityDelay', 'LateAircraftDelay']
+    df.to_csv(fname, index=False)
 
-        def execute_many(self, sql, data_list):
-            try:
-                with self.conn:
-                    with self.conn.cursor() as curs:
-                        curs.executemany(sql, data_list)
-            except Exception as e:
-                self.conn.rollback()
-                print(f"Error while bulk inserting: {e}")
-                raise e
-
-    postgres = PostgresDB("172.31.3.234", "airport", "postgres", "postgres")
-    sql = f"COPY (SELECT * FROM db WHERE db.Year={year} and db.month={month}) TO '{fname}' WITH CSV HEADER;"
-    postgres.execute(sql)
+    # 데이터베이스 연결 종료
+    conn.close()
 
     # local_to_minio
     from minio import Minio
