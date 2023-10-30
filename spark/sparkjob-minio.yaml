@@ -7,7 +7,7 @@ spec:
     type: Python
     pythonVersion: "3"
     mode: cluster
-    image: "dbin67/sparkjob-demo:0.5"
+    image: "dbin67/sparkjob-demo:0.6"
     imagePullPolicy: Always
     mainApplicationFile: local:///app/main.py
     sparkVersion: "3.3.1"
