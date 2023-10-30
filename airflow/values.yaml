@@ -1,3 +1,6 @@
+defaultAirflowRepository: dbin67/airflow-ec2
+defaultAirflowTag: "0.3"
+
 webserver:
   service:
     type: LoadBalancer
