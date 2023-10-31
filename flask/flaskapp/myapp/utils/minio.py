@@ -8,10 +8,10 @@ local_folder = "spark_model"
 
 def download_model():
     # 환경 변수에서 값을 가져옴
-    minio_server = os.getenv("MINIO_SERVER_IP", "13.209.225.84")
-    minio_port = os.getenv("MINIO_PORT", "9000")
-    minio_id = os.getenv("MINIO_ID", "admin")
-    minio_password = os.getenv("MINIO_PASSWORD", "password")
+    minio_server = os.getenv("MINIO_SERVER_IP")
+    minio_port = os.getenv("MINIO_PORT")
+    minio_id = os.getenv("MINIO_ID")
+    minio_password = os.getenv("MINIO_PASSWORD")
 
     # MinIO 클라이언트 생성
     client = Minio(f"{minio_server}:{minio_port}", minio_id, minio_password, secure=False)
