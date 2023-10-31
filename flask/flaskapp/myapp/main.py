@@ -67,32 +67,19 @@ def test():
 def predict():
     try:
         data = request.get_json()  # JSON 데이터를 받아옵니다.
-        month = int(data['month'])  # Month를 정수로 변환
-        dayOfMonth = int(data['dayOfMonth'])
-        dayOfWeek = int(data['dayOfWeek'])  
-        crsDepTime = int(data['crsDepTime'])  
-        crsArrTime = int(data['crsArrTime'])  
-        distance = int(data['distance'])  
-        originIndex = int(data['originIndex'])
-        destIndex = int(data['destIndex'])
-        carrierIndex = int(data['carrierIndex'])
-
-                # sample user input
-        user_input = { "Month": month, "DayofMonth": dayOfMonth, "DayOfWeek": dayOfWeek,
-                    "CRSDepTime": crsDepTime, "CRSArrTime": crsArrTime,
-                    "Distance": distance,"OriginIndex":originIndex, "DestIndex":destIndex,"CarrierIndex":carrierIndex}
-
+        print(data)
         # from user input to spark df
-        data = pipeline_model.transform(spark.createDataFrame([user_input]))
-
+        data = pipeline_model.transform(spark.createDataFrame([data]))
+        print(data)
         # 불러온 모델로 예측하기
         predictions = loaded_lrModel.transform(data)
-        
+        print(predictions)
         result = round(predictions.collect()[0].predArrDelay,5)
-
+        print(result)
         return jsonify({'result': result})  # 결과를 JSON 형식으로 반환
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
