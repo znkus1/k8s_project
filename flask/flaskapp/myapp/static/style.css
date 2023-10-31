@@ -19,8 +19,10 @@ header {
 }
 
 .logo img {
-    max-width: 100%; /* 로고 이미지의 최대 너비를 100%로 설정 */
-    height: auto; /* 로고 이미지의 높이를 자동으로 조절하여 가로비율 유지 */
+    max-width: 100%;
+    /* 로고 이미지의 최대 너비를 100%로 설정 */
+    height: auto;
+    /* 로고 이미지의 높이를 자동으로 조절하여 가로비율 유지 */
 }
 
 .search {
@@ -32,6 +34,13 @@ header {
 
 input[type="text"] {
     padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+select {
+    padding: 10px;
+    margin: 1px;
     border: none;
     border-radius: 5px;
 }
@@ -65,13 +74,16 @@ button {
     padding: 10px;
     text-align: center;
 }
+
 form {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
 
-input, button {
+input,
+button,
+select {
     margin-bottom: 10px;
     padding: 10px;
     font-size: 16px;
@@ -107,28 +119,36 @@ button:hover {
     background-color: #f0f0f0;
     border: 1px solid #ddd;
     border-radius: 5px;
-    transition: all 0.5s ease; /* 추가 */
+    transition: all 0.5s ease;
+    /* 추가 */
 }
+
 .main-content {
     display: flex;
-    align-items: center; /* 세로 중앙 정렬 */
+    align-items: center;
+    /* 세로 중앙 정렬 */
 }
 
 .center-image {
-    flex: 2; /* 왼쪽 영역을 확장하여 가운데 정렬 */
-    text-align: center; /* 가운데 정렬 */
-    margin-right: 20px; /* 오른쪽 여백 추가 */
+    flex: 2;
+    /* 왼쪽 영역을 확장하여 가운데 정렬 */
+    text-align: center;
+    /* 가운데 정렬 */
+    margin-right: 20px;
+    /* 오른쪽 여백 추가 */
 }
 
 .center-image img {
-    max-width: 100%; /* 이미지의 최대 너비를 부모 요소에 맞게 조절 */
-    height: auto; /* 이미지의 높이를 자동으로 조절하여 가로비율 유지 */
+    max-width: 100%;
+    /* 이미지의 최대 너비를 부모 요소에 맞게 조절 */
+    height: auto;
+    /* 이미지의 높이를 자동으로 조절하여 가로비율 유지 */
 }
 
 .container {
-    flex: 1; /* 오른쪽 영역을 확장하여 유지 */
+    flex: 1;
+    /* 오른쪽 영역을 확장하여 유지 */
     padding: 20px;
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
-
