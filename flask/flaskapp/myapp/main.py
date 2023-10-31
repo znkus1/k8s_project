@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from utils.spark import spark, loaded_lrModel, pipeline_model
+from utils.minio import download_model
 
 
 app = Flask(__name__)
@@ -12,6 +13,12 @@ app.template_folder = 'templates'
 @app.route('/')
 def input_page():
     return render_template('index.html')
+
+
+@app.route('/update_model')
+def update_model():
+    download_model()
+    return "model updated"
 
 
 @app.route('/test', methods=['POST', 'GET'])
@@ -33,4 +40,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
