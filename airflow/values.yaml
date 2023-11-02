@@ -1,0 +1,59 @@
+uid: 0
+gid: 0
+
+defaultAirflowRepository: dbin67/airflow-ec2
+defaultAirflowTag: "0.3"
+
+webserver:
+  service:
+    type: LoadBalancer
+    ports:
+      - name: airflow-ui
+        port: "{{ .Values.ports.airflowUI }}"
+  defaultUser:
+    enabled: true
+    role: Admin
+    username: admin
+    email: test@email.com
+    firstName: admin
+    lastName: user
+    password: admin
+
+workers:
+  persistence:
+    enabled: false
+
+triggerer:
+  persistence:
+    enabled: false
+
+dags:
+  persistence:
+    enabled: true
+    size: 100Mi
+    storageClassName: pv-airflow-dags
+    accessMode: ReadWriteMany
+
+logs:
+  persistence:
+    enabled: true
+    size: 3Gi
+    storageClassName: pv-airflow-logs
+
+migrateDatabaseJob:
+  enabled: true
+
+postgresql:
+  enabled: false
+
+data:
+  metadataConnection:
+    user: airflow
+    pass: airflow
+    protocol: postgresql
+    host: 172.31.3.234
+    port: 5432
+    db: airflow
+    sslmode: require  # disable
+
+executor: "KubernetesExecutor"

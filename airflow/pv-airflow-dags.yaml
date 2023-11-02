@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-airflow-dags
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 5Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: pv-airflow-dags
+  nfs:
+    server: 172.31.3.234
+    path: /mnt/data/airflow/dags

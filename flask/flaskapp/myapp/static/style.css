@@ -1,0 +1,154 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #0070C0;
+    color: #fff;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    height: auto;
+}
+
+.logo img {
+    max-width: 100%;
+    /* 로고 이미지의 최대 너비를 100%로 설정 */
+    height: auto;
+    /* 로고 이미지의 높이를 자동으로 조절하여 가로비율 유지 */
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+
+input[type="text"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+select {
+    padding: 10px;
+    margin: 1px;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #ff6200;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 검색 결과 스타일링 */
+.search-results {
+    margin: 20px;
+}
+
+#ticket-info {
+    display: none;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+#prediction-info {
+    display: none;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+input,
+button,
+select {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.fas.fa-plane-departure {
+    margin-right: 10px;
+}
+
+#airline-ranking {
+    margin-top: 20px;
+}
+
+#airline-ranking li {
+    margin-bottom: 5px;
+}
+
+#airline-ranking li {
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.5s ease;
+    /* 추가 */
+}
+
+.main-content {
+    display: flex;
+    align-items: center;
+    /* 세로 중앙 정렬 */
+}
+
+.center-image {
+    flex: 2;
+    /* 왼쪽 영역을 확장하여 가운데 정렬 */
+    text-align: center;
+    /* 가운데 정렬 */
+    margin-right: 20px;
+    /* 오른쪽 여백 추가 */
+}
+
+.center-image img {
+    max-width: 100%;
+    /* 이미지의 최대 너비를 부모 요소에 맞게 조절 */
+    height: auto;
+    /* 이미지의 높이를 자동으로 조절하여 가로비율 유지 */
+}
+
+.container {
+    flex: 1;
+    /* 오른쪽 영역을 확장하여 유지 */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
