@@ -1,13 +1,14 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import pytz
 
 from airflow import DAG
-from airflow.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.bash import BashOperator
 
 
 default_args = {
     "owner": "donghyun",
-    "retries": 5,
+    "retries": 2,
     "retry_delay": timedelta(minutes=5),
 }
 tz = pytz.timezone("Asia/Seoul")
@@ -20,11 +21,19 @@ year, month = dt.year, 12 if dt.month == 1 else dt.month - 1
 fname = f"{year}{month:02}.csv"
 
 
+def check_exist():
+    from minio import Minio
+    client = Minio("172.31.3.234:9000", "admin", "password", secure=False)
+    for obj in client.list_objects("csv"):
+        if fname == obj.object_name:
+            return "complete"
+    return "postgres_to_minio"
+
 def postgres_to_minio():
-    # postgres_to_local
     import pandas as pd
     import psycopg2
 
+    # postgres_to_local
     # 데이터베이스에 연결
     conn = psycopg2.connect(
         host="172.31.3.234",
@@ -51,6 +60,28 @@ def postgres_to_minio():
     client = Minio("172.31.3.234:9000", "admin", "password", secure=False)
     client.fput_object('csv', fname, fname)
 
+def failure_callback():
+    import requests, time, hmac, hashlib, uuid, platform
+
+    api_key = ""
+    api_secret_key = ""
+    phone = ''
+    text = "task fails"
+
+    url = "https://api.solapi.com/messages/v4/send"
+    utc_offset_sec = time.altzone if time.localtime().tm_isdst else time.timezone
+    utc_offset = timedelta(seconds=-utc_offset_sec)
+    date = datetime.now().replace(tzinfo=timezone(offset=utc_offset)).isoformat()
+    salt = str(uuid.uuid1().hex)
+    signature = hmac.new(api_secret_key.encode(), (date + salt).encode(), hashlib.sha256).hexdigest()
+    header = {
+        'Authorization': 'HMAC-SHA256 ApiKey=' + api_key + ', Date=' + date + ', salt=' + salt + ', signature=' + signature,
+        'Content-Type': 'application/json; charset=utf-8'
+    }
+    data = {'message': {'to': phone, 'from': phone, 'text': text}}
+    data["agent"] = {"sdkVersion": "python/4.2.0", "osPlatform": platform.platform() + " | " + platform.python_version()}
+    requests.post(url, headers=header, json=data)
+    return
 
 with DAG(
     dag_id="monthly_db_to_minio",
@@ -59,7 +90,17 @@ with DAG(
     schedule_interval="@monthly",
     catchup=False,
 ) as dag:
-    task = PythonOperator(task_id="postgres_to_minio",
-                          python_callable=postgres_to_minio)
+    op_check_exist = BranchPythonOperator(task_id="check_exist", 
+                                          python_callable=check_exist,
+                                          on_failure_callback=failure_callback,
+                                          )
 
-    task
+    op_postgres_to_minio = PythonOperator(task_id="postgres_to_minio",
+                                          python_callable=postgres_to_minio,
+                                          on_failure_callback=failure_callback,
+                                          )
+
+    op_complete = BashOperator(task_id="complete", depends_on_past=False, bash_command="echo complete")
+
+    op_check_exist >> op_postgres_to_minio >> op_complete
+    op_check_exist >> op_complete
