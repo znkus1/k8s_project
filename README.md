@@ -19,10 +19,6 @@
 AWS EC2, Kubernetes, Flask, Kafka, Spark, Airflow, miniO, PostgreSQL,
 Prometheus, Grafana, Loki, ArgoCD
 
-### 아키텍처
-
-![스크린샷 2024-01-25 오전 10.25.59.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/523729f7-133e-4867-b5f9-14f93e19bf95/fa55a760-2994-478c-8b29-3db13dc808dd/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-01-25_%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB_10.25.59.png)
-
 ### 프로젝트 세부사항
 
 - AWS EC2 환경에서 쿠버네티스 클러스터 구축
