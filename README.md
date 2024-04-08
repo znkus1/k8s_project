@@ -19,6 +19,8 @@
     - AWS EC2, Kubernetes, Flask, Kafka, Spark, Airflow, miniO, PostgreSQL, Prometheus, Grafana, Loki, ArgoCD.
 - **데이터 출처, 용량, 특징 등**:
     - 항공데이터(csv파일) 약 240만 행의 데이터.
+      
+![archi](https://github.com/znkus1/youtube-re-project/assets/130662133/d055b460-a778-49a3-9696-7a72e3d106c1)
 
 ## 프로젝트 진행 단계
 - 쿠버네티스 클러스터 구축.
@@ -40,12 +42,7 @@
     - pyspark를 이용해서 머신러닝 코드 작성 (선형회귀 모델).
     - 학습 후에 모델을 MiniO에 저장.
 - **Flask 웹서버를 이용해서 사용자가 예측 결과를 직접 확인**.
-
-## 프로젝트 결과
-- **모델의 성능**:
-    - RMSE : 29.905.
-    - MAE : 16.696.
-- **배포 링크**:
+<img width="1361" alt="IMAGE" src="https://github.com/znkus1/youtube-re-project/assets/130662133/8e35a20d-f82e-4d99-9e41-43ccb2ce7aaa">
 
 ## 프로젝트 회고
 - **잘 한점**:
