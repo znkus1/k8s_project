@@ -46,7 +46,7 @@
 
 ## 프로젝트 회고
 - **잘 한점**:
-    - 작업과정을 Github wiki에 정리함으로 모든 팀원들이 과정들을 쉽게 확인하고 공유 가능하게 함.
+    - 작업과정을 Github wiki에 정리함으로 모든 팀원들이 과정들을 쉽게 확인하고 공유 가능하게 함. [project-link](https://github.com/yeardream-de-project-team4/k8s_project/wiki)
 - **한계점 및 개선 방안**:
     - 쿠버네티스에 대한 이해도를 높일 수 있었으며 향후에 쿠버네티스 클러스터를 구축함에 있어서 AWS에 EKS 서비스를 사용해서 구현 해볼 계획.
 
